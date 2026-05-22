@@ -1,0 +1,37 @@
+# Build outputs
+artifacts/
+bin/
+obj/
+**/bin/
+**/obj/
+
+# Visual Studio / user-local files
+.vs/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# Local tool caches
+.dotnet/
+.templateengine/
+.nuget/
+
+# Runtime and temporary folders
+Temp/
+默认接收目录/
+Config/linkdata.xml
+
+# Generated packages
+*.zip
+
+# Debug symbols and host leftovers
+*.exe
+*.pdb
+*.vshost.exe
+*.vshost.exe.config
+*.vshost.exe.manifest
+
+# Legacy migrated binaries
+_src/
+log4net.dll
