@@ -19,6 +19,10 @@ public sealed partial class MainForm : Form
     private readonly Dictionary<Guid, TransferRow> _activeIndex = [];
     private readonly Dictionary<string, Panel> _pages = new(StringComparer.OrdinalIgnoreCase);
     private readonly Dictionary<string, Button> _navButtons = new(StringComparer.OrdinalIgnoreCase);
+    private const int FieldLabelWidth = 86;
+    private const int FieldHeight = 30;
+    private const int BrowseButtonWidth = 96;
+    private const int BrowseButtonHeight = 34;
 
     public MainForm()
     {
@@ -129,63 +133,72 @@ public sealed partial class MainForm : Form
     private void LayoutSendConfigPage()
     {
         const int left = 0;
-        const int top = 60;
         const int margin = 12;
         var width = Math.Max(900, pageSendConfig.ClientSize.Width);
         var height = Math.Max(600, pageSendConfig.ClientSize.Height);
+        var contentTop = LayoutConfigHeader(lblSendConfigTitle, lblSendConfigDesc, width);
 
-        grpSendAdd.SetBounds(left, top, width, 262);
-        grpSendLinks.SetBounds(left, top + grpSendAdd.Height + margin, width, Math.Max(220, height - (top + grpSendAdd.Height + margin)));
+        grpSendAdd.SetBounds(left, contentTop, width, 284);
+        grpSendLinks.SetBounds(left, contentTop + grpSendAdd.Height + margin, width, Math.Max(220, height - (contentTop + grpSendAdd.Height + margin)));
         LayoutSendConfigContent();
+    }
+
+    private static int LayoutConfigHeader(Label title, Label desc, int width)
+    {
+        const int titleHeight = 28;
+        const int descHeight = 24;
+        const int bottomGap = 8;
+
+        title.Dock = DockStyle.None;
+        desc.Dock = DockStyle.None;
+        title.AutoSize = false;
+        desc.AutoSize = false;
+        title.SetBounds(0, 0, width, titleHeight);
+        desc.SetBounds(0, title.Bottom, width, descHeight);
+        title.BringToFront();
+        desc.BringToFront();
+
+        return desc.Bottom + bottomGap;
     }
 
     private void LayoutSendConfigContent()
     {
         const int labelLeft = 18;
-        const int inputLeft = 96;
+        const int inputLeft = 116;
         const int rightLabelLeft = 388;
-        const int rightInputLeft = 466;
+        const int rightInputLeft = 488;
         const int row1Top = 30;
-        const int row2Top = 76;
-        const int row3Top = 122;
-        const int row4Top = 168;
-        const int buttonRowTop = 208;
-        const int browseWidth = 76;
+        const int row2Top = 78;
+        const int row3Top = 126;
+        const int row4Top = 174;
+        const int buttonRowTop = 220;
 
         var addWidth = Math.Max(900, grpSendAdd.ClientSize.Width);
-        var monitorWidth = Math.Max(260, addWidth - rightInputLeft - browseWidth - 120);
-        var backupWidth = Math.Max(360, addWidth - inputLeft - browseWidth - 114);
+        var monitorWidth = Math.Max(260, addWidth - rightInputLeft - BrowseButtonWidth - 120);
+        var backupWidth = Math.Max(360, addWidth - inputLeft - BrowseButtonWidth - 114);
         var filterWidth = Math.Max(220, addWidth - rightInputLeft - 176);
 
-        lblSendLinkName.Location = new Point(labelLeft, row1Top + 2);
-        txtSendLinkName.Location = new Point(inputLeft, row1Top);
-        txtSendLinkName.Size = new Size(260, 23);
+        LayoutFieldLabel(lblSendLinkName, labelLeft, row1Top);
+        LayoutTextBox(txtSendLinkName, inputLeft, row1Top, 260);
 
-        lblSendMonitorPath.Location = new Point(rightLabelLeft, row1Top + 2);
-        txtSendMonitorPath.Location = new Point(rightInputLeft, row1Top);
-        txtSendMonitorPath.Size = new Size(monitorWidth, 23);
-        btnSendBrowseMonitor.Location = new Point(txtSendMonitorPath.Right + 18, row1Top - 2);
-        btnSendBrowseMonitor.Size = new Size(browseWidth, 27);
+        LayoutFieldLabel(lblSendMonitorPath, rightLabelLeft, row1Top);
+        LayoutTextBox(txtSendMonitorPath, rightInputLeft, row1Top, monitorWidth);
+        LayoutBrowseButton(btnSendBrowseMonitor, txtSendMonitorPath.Right + 18, row1Top - 2);
 
-        lblSendAddress.Location = new Point(labelLeft, row2Top + 2);
-        txtSendAddress.Location = new Point(inputLeft, row2Top);
-        txtSendAddress.Size = new Size(260, 23);
-        lblSendPort.Location = new Point(rightLabelLeft, row2Top + 2);
+        LayoutFieldLabel(lblSendAddress, labelLeft, row2Top);
+        LayoutTextBox(txtSendAddress, inputLeft, row2Top, 260);
+        LayoutFieldLabel(lblSendPort, rightLabelLeft, row2Top);
         numSendPort.Location = new Point(rightInputLeft, row2Top);
-        numSendPort.Size = new Size(160, 23);
+        numSendPort.Size = new Size(160, FieldHeight);
 
-        lblSendBackupPath.Location = new Point(labelLeft, row3Top + 2);
-        txtSendBackupPath.Location = new Point(inputLeft, row3Top);
-        txtSendBackupPath.Size = new Size(backupWidth, 23);
-        btnSendBrowseBackup.Location = new Point(txtSendBackupPath.Right + 18, row3Top - 2);
-        btnSendBrowseBackup.Size = new Size(browseWidth, 27);
+        LayoutFieldLabel(lblSendBackupPath, labelLeft, row3Top);
+        LayoutTextBox(txtSendBackupPath, inputLeft, row3Top, backupWidth);
+        LayoutBrowseButton(btnSendBrowseBackup, txtSendBackupPath.Right + 18, row3Top - 2);
 
-        lblSendIdentity.Location = new Point(labelLeft, row4Top + 2);
-        txtSendIdentity.Location = new Point(inputLeft, row4Top);
-        txtSendIdentity.Size = new Size(260, 23);
-        lblSendFilter.Location = new Point(rightLabelLeft, row4Top + 2);
-        txtSendFilter.Location = new Point(rightInputLeft, row4Top);
-        txtSendFilter.Size = new Size(filterWidth, 23);
+        LayoutFieldLabel(lblSendIdentity, labelLeft, row4Top);
+        LayoutTextBox(txtSendIdentity, inputLeft, row4Top, 260);
+        LayoutFieldLabel(lblSendFilter, rightLabelLeft, row4Top);
+        LayoutTextBox(txtSendFilter, rightInputLeft, row4Top, filterWidth);
 
         panelSendButtons.Visible = false;
         EnsureSendButtonParent(btnSendAdd);
@@ -256,13 +269,13 @@ public sealed partial class MainForm : Form
     private void LayoutReceiveConfigPage()
     {
         const int left = 0;
-        const int top = 60;
         const int margin = 12;
         var width = Math.Max(900, pageReceiveConfig.ClientSize.Width);
         var height = Math.Max(600, pageReceiveConfig.ClientSize.Height);
+        var contentTop = LayoutConfigHeader(lblReceiveConfigTitle, lblReceiveConfigDesc, width);
 
-        grpReceiveListen.SetBounds(left, top, width, 84);
-        grpReceiveAdd.SetBounds(left, grpReceiveListen.Bottom + margin, width, 224);
+        grpReceiveListen.SetBounds(left, contentTop, width, 92);
+        grpReceiveAdd.SetBounds(left, grpReceiveListen.Bottom + margin, width, 236);
         grpReceiveLinks.SetBounds(left, grpReceiveAdd.Bottom + margin, width, Math.Max(220, height - (grpReceiveAdd.Bottom + margin)));
 
         LayoutReceiveConfigContent();
@@ -273,48 +286,35 @@ public sealed partial class MainForm : Form
         // 接收配置页按发送配置页的布局节奏重新排版：
         // 第一行放监听参数，第二个分组内按“左字段 + 右字段 / 目录整行 / 操作按钮”排列。
         const int labelLeft = 18;
-        const int inputLeft = 96;
+        const int inputLeft = 116;
         const int rightLabelLeft = 388;
-        const int rightInputLeft = 466;
+        const int rightInputLeft = 488;
         const int row1Top = 30;
-        const int row2Top = 76;
-        const int row3Top = 122;
-        const int buttonRowTop = 166;
-        const int browseWidth = 76;
+        const int row2Top = 78;
+        const int row3Top = 126;
+        const int buttonRowTop = 172;
 
-        var listenWidth = Math.Max(900, grpReceiveListen.ClientSize.Width);
         var addWidth = Math.Max(900, grpReceiveAdd.ClientSize.Width);
-        var widePathWidth = Math.Max(360, addWidth - inputLeft - browseWidth - 114);
+        var widePathWidth = Math.Max(360, addWidth - inputLeft - BrowseButtonWidth - 114);
 
-        lblReceiveListenIP.Location = new Point(labelLeft, 32);
-        txtReceiveListenIP.Location = new Point(inputLeft, 30);
-        txtReceiveListenIP.Size = new Size(220, 23);
-        lblReceiveListenPort.Location = new Point(352, 32);
-        numReceiveListenPort.Location = new Point(430, 30);
-        numReceiveListenPort.Size = new Size(160, 23);
+        LayoutFieldLabel(lblReceiveListenIP, labelLeft, 30);
+        LayoutTextBox(txtReceiveListenIP, inputLeft, 30, 220);
+        LayoutFieldLabel(lblReceiveListenPort, rightLabelLeft, 30);
+        numReceiveListenPort.Location = new Point(rightInputLeft, 30);
+        numReceiveListenPort.Size = new Size(160, FieldHeight);
 
-        if (listenWidth > 760)
-        {
-            numReceiveListenPort.Location = new Point(Math.Min(listenWidth - 220, 430), 30);
-        }
+        LayoutFieldLabel(lblReceiveLinkName, labelLeft, row1Top);
+        LayoutTextBox(txtReceiveLinkName, inputLeft, row1Top, 260);
 
-        lblReceiveLinkName.Location = new Point(labelLeft, row1Top + 2);
-        txtReceiveLinkName.Location = new Point(inputLeft, row1Top);
-        txtReceiveLinkName.Size = new Size(260, 23);
+        LayoutFieldLabel(lblReceiveRemoteIP, rightLabelLeft, row1Top);
+        LayoutTextBox(txtReceiveRemoteIP, rightInputLeft, row1Top, Math.Max(260, addWidth - rightInputLeft - 120));
 
-        lblReceiveRemoteIP.Location = new Point(rightLabelLeft, row1Top + 2);
-        txtReceiveRemoteIP.Location = new Point(rightInputLeft, row1Top);
-        txtReceiveRemoteIP.Size = new Size(Math.Max(260, addWidth - rightInputLeft - 120), 23);
+        LayoutFieldLabel(lblReceivePath, labelLeft, row2Top);
+        LayoutTextBox(txtReceivePath, inputLeft, row2Top, widePathWidth);
+        LayoutBrowseButton(btnReceiveBrowsePath, txtReceivePath.Right + 18, row2Top - 2);
 
-        lblReceivePath.Location = new Point(labelLeft, row2Top + 2);
-        txtReceivePath.Location = new Point(inputLeft, row2Top);
-        txtReceivePath.Size = new Size(widePathWidth, 23);
-        btnReceiveBrowsePath.Location = new Point(txtReceivePath.Right + 18, row2Top - 2);
-        btnReceiveBrowsePath.Size = new Size(browseWidth, 27);
-
-        lblReceiveIdentity.Location = new Point(labelLeft, row3Top + 2);
-        txtReceiveIdentity.Location = new Point(inputLeft, row3Top);
-        txtReceiveIdentity.Size = new Size(260, 23);
+        LayoutFieldLabel(lblReceiveIdentity, labelLeft, row3Top);
+        LayoutTextBox(txtReceiveIdentity, inputLeft, row3Top, 260);
 
         // 这里不再依赖 FlowLayoutPanel 自动排布，避免运行时把后面的按钮压成小白块。
         panelReceiveButtons.Visible = false;
@@ -366,6 +366,32 @@ public sealed partial class MainForm : Form
         button.Margin = new Padding(0, 0, 10, 0);
         button.Padding = new Padding(0);
         button.Size = new Size(width, 34);
+    }
+
+    private static void LayoutFieldLabel(Label label, int x, int y)
+    {
+        label.AutoSize = false;
+        label.Location = new Point(x, y);
+        label.Size = new Size(FieldLabelWidth, FieldHeight);
+        label.TextAlign = ContentAlignment.MiddleLeft;
+        label.BringToFront();
+    }
+
+    private static void LayoutTextBox(TextBox textBox, int x, int y, int width)
+    {
+        textBox.AutoSize = false;
+        textBox.Location = new Point(x, y);
+        textBox.Size = new Size(width, FieldHeight);
+    }
+
+    private static void LayoutBrowseButton(Button button, int x, int y)
+    {
+        button.AutoSize = false;
+        button.Text = "\u6D4F\u89C8";
+        button.Padding = Padding.Empty;
+        button.TextAlign = ContentAlignment.MiddleCenter;
+        button.Location = new Point(x, y);
+        button.Size = new Size(BrowseButtonWidth, BrowseButtonHeight);
     }
 
     private void LayoutReceiveStatePage()
