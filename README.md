@@ -2,6 +2,14 @@
 
 一个面向 Windows/Windows Server 的文件传输节点工具。程序基于 Windows Forms 和 .NET 9 开发，同一套程序可以同时配置发送链路和接收链路，用于在多台服务器之间按目录、链路标识和端口转发文件。
 
+当前发布版本：`v1.0`
+
+## 文档
+
+- [产品文档](docs/product-documentation.md)
+- [Word 版产品文档](文件传输工具-产品文档.docx)
+- [用户操作说明](文件传输工具-用户操作说明.docx)
+
 ## 主要能力
 
 - 发送链路：监控本机目录，将符合过滤规则的正式文件发送到远端节点。
@@ -113,7 +121,7 @@ dotnet publish FileTransferTool.App\FileTransferTool.App.csproj `
 ```powershell
 Compress-Archive `
   -Path artifacts\publish\FileTransferTool.App\win-x64\* `
-  -DestinationPath artifacts\release\FileTransferTool-win-x64.zip `
+  -DestinationPath artifacts\release\FileTransferTool-win-x64-v1.0.zip `
   -Force
 ```
 
@@ -137,7 +145,7 @@ powershell -NoProfile -ExecutionPolicy Bypass `
 
 ## 部署步骤
 
-1. 从 GitHub Releases 下载 `FileTransferTool-win-x64.zip`。
+1. 从 GitHub Releases 下载 `FileTransferTool-win-x64-v1.0.zip`。
 2. 解压到目标服务器目录，例如 `D:\Apps\FileTransferTool`。
 3. 按实际环境修改 `Config\linkdata.xml`。
 4. 双击运行 `FileTransferTool.App.exe`。

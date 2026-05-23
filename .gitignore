@@ -21,6 +21,9 @@ obj/
 Temp/
 默认接收目录/
 Config/linkdata.xml
+Config/app.config
+Temp*.xml
+*.exe.config
 
 # Generated packages
 *.zip
