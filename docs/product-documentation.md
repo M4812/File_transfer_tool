@@ -1,6 +1,6 @@
 # 文件传输工具产品文档
 
-版本：v1.0  
+版本：v1.1  
 发布日期：2026-05-23  
 适用平台：Windows 10/11、Windows Server
 
@@ -119,7 +119,7 @@ Copy-Item Config\linkdata.example.xml Config\linkdata.xml
 
 ## 11. 发布与部署
 
-生成 v1.0 自包含发布目录：
+生成 v1.1 自包含发布目录：
 
 ```powershell
 dotnet publish FileTransferTool.App\FileTransferTool.App.csproj `
@@ -134,7 +134,7 @@ dotnet publish FileTransferTool.App\FileTransferTool.App.csproj `
 ```powershell
 Compress-Archive `
   -Path artifacts\publish\FileTransferTool.App\win-x64\* `
-  -DestinationPath artifacts\release\FileTransferTool-win-x64-v1.0.zip `
+  -DestinationPath artifacts\release\FileTransferTool-win-x64-v1.1.zip `
   -Force
 ```
 
